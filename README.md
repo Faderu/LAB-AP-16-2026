@@ -55,7 +55,7 @@
 
    ```sh
    CATATAN: NAMA FILE TUGAS ADALAH "TPn_noSoal_NIM.py"
-   CONTOH: TP1_1_H071201080.java , TP2_3_H071201080.py
+   CONTOH: TP1_1_H071201080.py , TP2_3_H071201080.py
    
    git add . #perintah ini memilih seluruh file sekaligus
    # atau
