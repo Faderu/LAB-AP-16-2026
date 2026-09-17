@@ -3,6 +3,7 @@ tujuan = input("Masukkan tujuan (Pantai/Pegunungan/Kota): ").capitalize()
 waktu = input("Masukkan waktu (Pagi/Malam): ").capitalize()
 tipe_pengunjung = input("Masukkan tipe pengunjung (Anak/Dewasa): ").capitalize()
 
+
 match tujuan:
     case "Pantai":
         if waktu == "Pagi":
