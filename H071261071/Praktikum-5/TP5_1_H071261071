@@ -1,0 +1,51 @@
+ALFABET = "abcdefghijklmnopqrstuvwxyz"
+
+
+def bersihkan_teks(teks):
+    hasil = ""
+
+    for karakter in teks.lower():
+        if karakter in ALFABET:
+            hasil += karakter
+
+    return hasil
+
+
+# Masukan diletakkan setelah definisi fungsi pertama
+teks_prasasti = input("Masukkan teks prasasti: ")
+
+
+def cek_palinrome(teks):
+    teks_balik = "".join(reversed(teks))
+
+    if teks == teks_balik:
+        return True, -1
+
+    for i in range(len(teks)):
+        if teks[i] != teks_balik[i]:
+            return False, i
+
+
+def inti_palinrome(teks):
+    teks_bersih = bersihkan_teks(teks)
+    palinrome_terbaik = ""
+    indeks_terbaik = 0
+
+    for awal in range(len(teks_bersih)):
+        for akhir in range(awal + 1, len(teks_bersih) + 1):
+            kandidat = teks_bersih[awal:akhir]
+            adalah_palinrome, _ = cek_palinrome(kandidat)
+
+            if adalah_palinrome and len(kandidat) > len(palinrome_terbaik):
+                palinrome_terbaik = kandidat
+                indeks_terbaik = awal
+
+    return {
+        "teks": palinrome_terbaik,
+        "panjang": len(palinrome_terbaik),
+        "indeks_awal": indeks_terbaik
+    }
+
+
+print("Teks bersih:", bersihkan_teks(teks_prasasti))
+print("Palindrom terpanjang:", inti_palinrome(teks_prasasti))

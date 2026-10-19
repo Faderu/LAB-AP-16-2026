@@ -1,0 +1,71 @@
+ALFABET = "abcdefghijklmnopqrstuvwxyz"
+
+
+def cek_kata(teks, kata):
+    indeks_kemunculan = []
+    teks_kecil = teks.lower()
+    kata_kecil = kata.lower()
+    awal_pencarian = 0
+
+    while True:
+        indeks = teks_kecil.find(kata_kecil, awal_pencarian)
+
+        if indeks == -1:
+            break
+
+        indeks_kemunculan.append(indeks)
+        awal_pencarian = indeks + 1
+
+    return indeks_kemunculan
+
+
+def cek_batas_kata(teks, indeks, panjang):
+    sebelum_adalah_huruf = (
+        indeks > 0
+        and teks[indeks - 1].lower() in ALFABET
+    )
+
+    sesudah_adalah_huruf = (
+        indeks + panjang < len(teks)
+        and teks[indeks + panjang].lower() in ALFABET
+    )
+
+    return not sebelum_adalah_huruf and not sesudah_adalah_huruf
+
+
+def sensor_kata(teks, kata, simbol):
+    indeks_ditemukan = cek_kata(teks, kata)
+    indeks_valid = []
+
+    for indeks in indeks_ditemukan:
+        if cek_batas_kata(teks, indeks, len(kata)):
+            indeks_valid.append(indeks)
+
+    hasil = ""
+    posisi_salin = 0
+    pengganti = simbol * len(kata)
+
+    for indeks in indeks_valid:
+        hasil += teks[posisi_salin:indeks]
+        hasil += pengganti
+        posisi_salin = indeks + len(kata)
+
+    hasil += teks[posisi_salin:]
+
+    return hasil, len(indeks_valid), indeks_valid
+
+
+# Meminta masukan dari pengguna
+teks = input("Masukkan teks: ")
+kata_target = input("Masukkan kata target: ")
+simbol = input("Masukkan simbol sensor: ")
+
+# Menjalankan proses penyensoran
+teks_tersensor, jumlah, indeks = sensor_kata(
+    teks, kata_target, simbol
+)
+
+# Menampilkan hasil
+print("Teks setelah disensor:", teks_tersensor)
+print("Jumlah kata yang disensor:", jumlah)
+print("Indeks awal pada teks asli:", indeks)

@@ -1,0 +1,60 @@
+ALFABET = "abcdefghijklmnopqrstuvwxyz"
+
+
+def cek_sandi(ch, k):
+    huruf_kecil = ch.lower()
+    indeks = ALFABET.find(huruf_kecil)
+
+    # Jika karakter bukan huruf alfabet, biarkan tetap.
+    if indeks == -1:
+        return ch
+
+    # Geser huruf, lalu gunakan modulo agar indeks tetap 0–25.
+    indeks_baru = (indeks + k) % 26
+    hasil = ALFABET[indeks_baru]
+
+    # Pertahankan apakah huruf aslinya kapital atau kecil.
+    if ch.isupper():
+        return hasil.upper()
+
+    return hasil
+
+
+def mesin_enkripsi(teks, k):
+    hasil = ""
+
+    for karakter in teks:
+        hasil += cek_sandi(karakter, k)
+
+    return hasil
+
+
+def mesin_dekripsi(teks, k):
+    # Dekripsi memakai mesin enkripsi dengan pergeseran berlawanan.
+    return mesin_enkripsi(teks, -k)
+
+
+def retas_sandi(sandi, kata_kunci):
+    kemungkinan = []
+    kata_kunci_kecil = kata_kunci.lower()
+
+    # Coba seluruh 26 kunci, dari 0 sampai 25.
+    for kunci in range(26):
+        pesan_asli = mesin_dekripsi(sandi, kunci)
+
+        # Simpan hasil jika mengandung kata kunci.
+        if pesan_asli.lower().find(kata_kunci_kecil) != -1:
+            kemungkinan.append((kunci, pesan_asli))
+
+    return kemungkinan
+
+
+# Meminta masukan dari pengguna
+pesan_tersita = input("Masukkan pesan tersita: ")
+kata_kunci = input("Masukkan kata kunci target: ")
+
+# Mencoba memecahkan pesan dengan seluruh kemungkinan kunci
+hasil = retas_sandi(pesan_tersita, kata_kunci)
+
+# Menampilkan hasil
+print("Hasil dekripsi:", hasil)
