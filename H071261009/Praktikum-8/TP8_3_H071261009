@@ -1,0 +1,39 @@
+import re
+
+def bersihkan_nomor(nomor):
+    return re.sub(r'[\s-]', '', nomor)
+
+def cek_nomor(nomor):
+    return re.match(r'^\d{10,13}$', nomor) 
+
+print("=== Pembersihan Data Nomor Telepon ===")
+print()
+jumlah = int(input("Masukkan jumlah data: "))
+print()
+
+data_awal = []
+data_bersih = []
+nomor_valid = []
+
+for i in range(jumlah):
+    nomor = input(f"Nomor ke-{i + 1}: ")
+    print()
+    data_awal.append(nomor)
+    data_bersih.append(bersihkan_nomor(nomor))
+
+print("--- Hasil Pembersihan ---")
+print()
+
+for i in range(jumlah):
+    print(f"Data {i + 1}:")
+    print("Sebelum :", data_awal[i])
+    print("Sesudah :", data_bersih[i])
+
+    if cek_nomor(data_bersih[i]):
+        print("Status  : Valid")
+        nomor_valid.append(data_bersih[i])
+    else:
+        print("Status  : Tidak valid")
+    print()
+
+print("Jumlah nomor valid:", len(nomor_valid))
