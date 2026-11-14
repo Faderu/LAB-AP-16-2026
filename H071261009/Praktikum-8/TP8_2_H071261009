@@ -1,0 +1,28 @@
+import re
+
+def validasi_username(username):
+    pattern = r'^[a-zA-Z][\w]{4,11}$'
+    if re.match(pattern, username):
+        daftar_username.append(username)
+        return "Username Tersedia."
+    else:
+        return "Username Tidak Valid!"
+
+daftar_username = []
+
+print ("=== Registrasi Username ===")
+print ("Ketik 'SELESAI' untuk mengakhiri.")
+print ()
+while True:
+    username = input("Masukkan username: ")
+
+    if username == "SELESAI":
+        print("=== Rekapitulasi ===")
+        print("Username valid:")
+        for i in range(len(daftar_username)):
+            print(f"{i+1}. {daftar_username[i]}")
+        print("Jumlah username valid:", len(daftar_username))
+        break
+
+    print(validasi_username(username))
+    print()

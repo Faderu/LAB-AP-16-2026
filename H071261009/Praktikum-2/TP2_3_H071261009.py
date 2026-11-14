@@ -3,7 +3,7 @@ nilai = int(input ("Masukkan nilai tes: "))
 
 # if nilai >= 80:
 #     print ("Lolos ke Tahap Wawancara")
-# if nilai >= 65 and pengalaman >= 2:
+# elif nilai >= 65 and pengalaman >= 2:
 #     print("Lolos Bersyarat")
 # else:
 #     print ("Tidak Lolos")

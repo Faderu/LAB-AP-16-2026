@@ -19,8 +19,7 @@ def deteksi_anomali_email(email):
     if local.startswith(".") or local.endswith(".") or local.find("..") != -1:
         masalah.append("Bagian local tidak boleh diawali/diakhiri titik atau mengandung titik berurutan.")
 
-    if domain.count(".") == 0:
-        masalah.append("Bagian domain wajib memiliki minimal satu titik.")
+    if domain.count(".") == 0:        masalah.append("Bagian domain wajib memiliki minimal satu titik.")
     if domain.find("..") != -1 or domain.endswith("."):
         masalah.append("Bagian domain tidak boleh mengandung titik berurutan atau diakhiri titik.")
 

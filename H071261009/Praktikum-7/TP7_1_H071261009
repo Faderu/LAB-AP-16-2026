@@ -1,0 +1,146 @@
+import os
+import random
+from datetime import datetime
+
+FOLDER = "invoice"
+RIWAYAT = "trx_history.txt"
+
+GARIS = "=" * 60
+GARIS_BAWAH = "_" * 70
+LEBAR = 67
+INDENT = " " * 5
+
+
+def buat_id_transaksi(nama_kasir, waktu):
+    inisial = ""
+    for kata in nama_kasir.split():
+        inisial += kata[0]
+
+    tanggal_waktu = waktu.strftime("%y%m%d%H%M") 
+    angka_acak = str(random.randint(100, 999))
+    
+    return inisial + tanggal_waktu + angka_acak
+
+def potong_nama_produk(produk):
+    if len(produk) > 18:
+        return produk[:15] + "..."
+    return produk
+
+def transaksi_baru(nama_kasir):
+    daftar_produk = []
+    total = 0
+
+    while True:
+        produk = input("Nama Produk              : ").capitalize()
+        harga = int(input("Harga Produk (Rp)        : "))
+        jumlah = int(input("Jumlah Produk            : "))
+        
+        daftar_produk.append([produk, harga, jumlah])
+        total = total + (harga * jumlah)
+
+        print(GARIS)
+        tambah_produk = input("Tambah produk? (Y/N)     : ").upper()
+        print(GARIS)
+        if tambah_produk == "N":
+            break
+
+    waktu = datetime.now()
+    id_transaksi = buat_id_transaksi(nama_kasir, waktu)
+
+    buat_invoice(id_transaksi, nama_kasir, waktu, daftar_produk, total)
+    catat_riwayat(waktu, id_transaksi, total)
+
+    print("TRANSAKSI BERHASIL".center(60))
+    print(GARIS)
+
+def buat_invoice(id_transaksi, nama_kasir, waktu, daftar_produk, total):
+    if not os.path.exists(FOLDER):
+        os.mkdir(FOLDER)
+
+    garis = "=" * LEBAR
+    garis_tabel = INDENT + "=" * 57
+
+    with open(FOLDER + "/" + id_transaksi + ".txt", "w") as f:
+        f.write("\n")
+        f.write(("TOKO KU").center(LEBAR) + "\n")
+        f.write(garis + "\n")
+        f.write("Nama kasir         : " + nama_kasir + "\n")
+        f.write("Waktu transaksi    : " + waktu.strftime("%d/%m/%y %H:%M") + "\n")
+        f.write(garis + "\n\n")
+
+        f.write("Daftar Produk".center(LEBAR) + "\n\n")
+        f.write(garis_tabel + "\n")
+        f.write(INDENT + "| " + "Nama".center(18) + " | " + "Harga".center(10)
+                + " | " + "Jumlah".center(6) + " | " + "Total".center(10) + " |\n")
+        f.write(garis_tabel + "\n")
+
+        for produk in daftar_produk:
+            nama = potong_nama_produk(produk[0])
+            harga = "Rp" + str(produk[1])
+            jumlah = str(produk[2])
+            subtotal = "Rp" + str(produk[1] * produk[2])
+            f.write(INDENT + "| " + nama.ljust(18) + " | " + harga.rjust(10)
+                    + " | " + jumlah.center(6) + " | " + subtotal.rjust(10) + " |\n")
+
+        f.write(garis_tabel + "\n")
+        f.write(INDENT + "| " + "TOTAL".center(40) + " | " + ("Rp" + str(total)).rjust(10) + " |\n")
+        f.write(garis_tabel + "\n\n")
+
+        f.write(garis + "\n")
+        f.write("TERIMA KASIH TELAH BERBELANJA".center(LEBAR) + "\n")
+        f.write(garis + "\n")
+
+# NO 2
+def cari_transaksi():
+    id_transaksi = input("Masukkan ID transaksi    : ")
+    print(GARIS_BAWAH)
+    try:
+        with open(FOLDER + "/" + id_transaksi + ".txt", "r") as f:
+            print(f.read())
+    except IOError:
+        print("\nInvoice dengan ID " + id_transaksi + " tidak ditemukan.\n")
+    print(GARIS_BAWAH)
+
+# NO 3
+def catat_riwayat(waktu, id_transaksi, total):
+    garis = "=" * LEBAR
+
+    if not os.path.exists(RIWAYAT):
+        with open(RIWAYAT, "w") as f:
+            f.write(garis + "\n")
+            f.write("|" + "RIWAYAT TRANSAKSI".center(64) + "\n")
+            f.write(garis + "\n")
+            f.write("| " + "Waktu".center(14) + " | " + "ID Transaksi".center(20) + " | " + "Nominal Transaksi".center(22) + " |\n")
+            f.write(garis + "\n")
+
+    with open(RIWAYAT, "a") as f:
+        f.write("| " + waktu.strftime("%d/%m/%y %H:%M").ljust(14) + " | " + id_transaksi.ljust(20) + " | " + ("Rp" + str(total)).rjust(22) + " |\n")
+        f.write(garis + "\n")
+
+
+print(GARIS)
+print("SELAMAT DATANG".center(60))
+print(GARIS)
+nama_kasir = input("Masukkan nama kasir      : ").title()
+print(GARIS)
+
+while True:
+    print("Pilih opsi:")
+    print("1. Transaksi baru")
+    print("2. Cari transaksi")
+    print("3. Keluar")
+    print(GARIS)
+    pilihan = input("Masukkan opsi pilihan    : ")
+    print(GARIS)
+
+    if pilihan == "1":
+        transaksi_baru(nama_kasir)
+    elif pilihan == "2":
+        cari_transaksi()
+    elif pilihan == "3":
+        print("SAMPAI JUMPA".center(60))
+        print(GARIS)
+        break
+    else:
+        print("Opsi tidak valid.")
+        print(GARIS)
